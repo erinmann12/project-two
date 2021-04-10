@@ -1,0 +1,6 @@
+-- CREATE TABLE hair (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+--     rockband VARCHAR(100) NOT NULL,
+--     num_hits INTEGER NOT NULL,
+--     num_albums INTEGER NOT NULL,
+-- );
