@@ -46,6 +46,10 @@ def home():
 # def data():
 
 #     return render_template("data.html")
+@app.route("/statedata")
+def states():
+
+    return render_template("bar_race.html")
 
 # -------------------------------------------------------------------
 # API endpoint one
