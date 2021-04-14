@@ -1,18 +1,24 @@
+//get data
 fetch('https://api.covid19india.org/states_daily.json')
 .then(res => res.json())
 .then(data=> {
    const totalCovidDataState = data.states_daily 
    const groupedData = processData(totalCovidDataState);
-   console.log(groupedData); 
-   plotChart(groupedData)
+   plotChart(groupedData);
 })
 
+//calculate yearly from quarterly stats
+
+// function to plot the daya
 async function plotChart(data) {
-   const svg = d3.select("#chart")
+   
+   // set up SVG
+    const svg = d3.select("#chart")
    const width = svg.node().clientWidth;
    const height = svg.node().clientHeight;
    const ticker = 500;
 
+   //get list of all dates
    const dateList = Array.from(data.keys())
    const fontSize = 16;
    const rectProperties = {height: 20, padding: 10}
@@ -30,6 +36,7 @@ async function plotChart(data) {
 
    const update = (date) =>  {
 
+        // get the particular date and chage requirements
        const presentData = processEachDateData(data.get(date).get("Confirmed")[0])
        widthScale.domain([0, d3.max(Object.values(presentData), d => d.value)])
                  .range([0, width - fontSize - 50])
@@ -65,6 +72,7 @@ async function plotChart(data) {
        container
            .selectAll("rect")
            .attr("x", 10)
+           .attr("fill","purple")
            .transition()
            .delay(500)
            .attr("y", (d,i) => sortedRange.findIndex(e => e.key === d.key) * (rectProperties.height + rectProperties.padding))
@@ -78,6 +86,7 @@ async function plotChart(data) {
    } 
 }
 
+//get data in format you want
 function processData(data) { 
    return d3.group(data, d => d.date, e => e.status);
 }

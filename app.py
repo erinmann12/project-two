@@ -42,10 +42,11 @@ def home():
 
     return render_template("index.html")
 
-# @app.route("/data")
-# def data():
+@app.route("/data")
+def data():
 
-#     return render_template("data.html")
+    return render_template("data.html")
+    
 @app.route("/statedata")
 def states():
 
