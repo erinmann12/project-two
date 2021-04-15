@@ -7,9 +7,7 @@ fetch('https://api.covid19india.org/states_daily.json')
    plotChart(groupedData);
 })
 
-//calculate yearly from quarterly stats
-
-// function to plot the daya
+// function to plot the data
 async function plotChart(data) {
    
    // set up SVG
@@ -49,6 +47,8 @@ async function plotChart(data) {
 
        const sortedRange = [...presentData].sort((a,b) => b.value - a.value)
 
+       d3.select("#datelocation").text(date)
+       
        container
            .selectAll("text")
            .data(presentData)
@@ -72,12 +72,13 @@ async function plotChart(data) {
        container
            .selectAll("rect")
            .attr("x", 10)
-           .attr("fill","purple")
+        //    .attr("fill","purple")
            .transition()
            .delay(500)
            .attr("y", (d,i) => sortedRange.findIndex(e => e.key === d.key) * (rectProperties.height + rectProperties.padding))
            .attr("width", d => d.value <= 0? 0 : widthScale(d.value))
            .attr("height", 20)
+           .attr("fill", d => d.value >1000 ? "red" : "green")
 
    }
    for (const date of dateList) {

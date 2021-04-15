@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -6,6 +7,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify, render_template
+import json
+import pprint
 
 
 # #################################################
@@ -23,6 +26,11 @@ print(Base.classes.keys())
 State = Base.classes.state
 usa = Base.classes.usa
 puerto_rico = Base.classes.puerto_rico
+quarterly_states = Base.classes.quarterly_states
+
+# sorted_state_df = pd.read_sql_table(quarterly_states)
+# grouped_states = sorted_state_df.groupby(["period","year","place_name"])
+# group_state_df = grouped_states.sum()
 
 #################################################
 # Flask Setup
@@ -131,7 +139,7 @@ def puerto_rico_data():
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+    # Create a dictionary from the row data and append to a list of adata
     puerto_rico_info = []
     for hpi_type, purchase_type, frequency, location, place_name, place_id, year, period, price in results:
         puerto_rico_dict = {}
@@ -148,6 +156,54 @@ def puerto_rico_data():
 
     return jsonify(puerto_rico_info)
 
+# -------------------------------------------------------------------
+# API endpoint four
+# -------------------------------------------------------------------
+@app.route("/api/v1.0/quarterly_states")
+def quarterly_states_data():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of quarterly_states_data"""
+    # Query all states
+    results = session.query(quarterly_states.hpi_type, quarterly_states.purchase_type, quarterly_states.frequency, quarterly_states.location, quarterly_states.place_name,
+        quarterly_states.place_id, quarterly_states.year, quarterly_states.period,quarterly_states.price).all()
+
+    session.close()
+
+    # Create a dictionary from the row data and append to a list of all_passengers
+    quarterly_states_info = []
+    for hpi_type, purchase_type, frequency, location, place_name, place_id, year, period, price in results:
+        quarterly_states_dict = {}
+        quarterly_states_dict["hpi_type"] = hpi_type
+        quarterly_states_dict["purchase_type"] = purchase_type
+        quarterly_states_dict["frequency"] = frequency
+        quarterly_states_dict["location"] = location
+        quarterly_states_dict["place_name"] = place_name
+        quarterly_states_dict["place_id"] = place_id
+        quarterly_states_dict["year"] =  year
+        quarterly_states_dict["period"] = period
+        quarterly_states_dict["price"] = price
+        quarterly_states_info.append(quarterly_states_dict)
+
+    return jsonify(quarterly_states_info)
+
+# -------------------------------------------------------------------
+# API endpoint five
+# -------------------------------------------------------------------
+@app.route("/api/v1.0/quarterly_data")
+def quarterly_data():
+    session = Session(engine)
+
+    # sorted_state_df = pd.read_sql_table(quarterly_states, con=engine)
+    sorted_state_df = pd.read_sql_query("SELECT * FROM quarterly_states", con=engine)
+    sorted_state_df['year-period'] = sorted_state_df['year'].astype(str) + "-" + sorted_state_df['period'].astype(str)
+    sorted_state_df = sorted_state_df.loc[sorted_state_df['hpi_type'] == 'traditional']
+    sorted_state_df = sorted_state_df.loc[sorted_state_df['purchase_type'] == 'all-transactions']
+    pivoted = sorted_state_df.pivot(index='year-period', columns='place_name', values='price')
+    session.close()
+
+    return pivoted.to_json(orient='table')
 
 if __name__ == '__main__':
     app.run(debug=True)
