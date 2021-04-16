@@ -27,10 +27,7 @@ State = Base.classes.state
 usa = Base.classes.usa
 puerto_rico = Base.classes.puerto_rico
 quarterly_states = Base.classes.quarterly_states
-
-# sorted_state_df = pd.read_sql_table(quarterly_states)
-# grouped_states = sorted_state_df.groupby(["period","year","place_name"])
-# group_state_df = grouped_states.sum()
+state_percent_increase = Base.classes.state_percent_increase
 
 #################################################
 # Flask Setup
@@ -197,13 +194,45 @@ def quarterly_data():
 
     # sorted_state_df = pd.read_sql_table(quarterly_states, con=engine)
     sorted_state_df = pd.read_sql_query("SELECT * FROM quarterly_states", con=engine)
-    sorted_state_df['year-period'] = sorted_state_df['year'].astype(str) + "-" + sorted_state_df['period'].astype(str)
+    sorted_state_df['year_period'] = sorted_state_df['year'].astype(str) + "-Q" + sorted_state_df['period'].astype(str)
     sorted_state_df = sorted_state_df.loc[sorted_state_df['hpi_type'] == 'traditional']
     sorted_state_df = sorted_state_df.loc[sorted_state_df['purchase_type'] == 'all-transactions']
-    pivoted = sorted_state_df.pivot(index='year-period', columns='place_name', values='price')
+    pivoted = sorted_state_df.pivot(index='year_period', columns='place_name', values='price')
     session.close()
 
-    return pivoted.to_json(orient='table')
+    return pivoted.to_json(orient='index')
+
+# -------------------------------------------------------------------
+# API endpoint six
+# -------------------------------------------------------------------
+@app.route("/api/v1.0/state_increase")
+def percent_increase():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of state_percent_increase"""
+    # Query all states
+    results = session.query(state_percent_increase.place_name, state_percent_increase.place_id,
+        state_percent_increase.year,state_percent_increase.period1, state_percent_increase.price1,
+        state_percent_increase.period4, state_percent_increase.price4, state_percent_increase.yearly_change).all()
+
+    session.close()
+
+    # Create a dictionary from the row data and append to a list of all_passengers
+    state_percent_increase_info = []
+    for place_name, place_id, year, period1, price1, period4, price4, yearly_change in results:
+        percent_increase_dict = {}
+        percent_increase_dict["place_name"] = place_name
+        percent_increase_dict["place_id"] = place_id
+        percent_increase_dict["year"] =  year
+        percent_increase_dict["period1"] = period1
+        percent_increase_dict["price1"] = price1
+        percent_increase_dict["period4"] = period4
+        percent_increase_dict["price4"] = price4
+        percent_increase_dict["yearly_change"] = yearly_change
+        state_percent_increase_info.append(percent_increase_dict)
+
+    return jsonify(state_percent_increase_info)
 
 if __name__ == '__main__':
     app.run(debug=True)
