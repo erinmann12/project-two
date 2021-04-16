@@ -19,8 +19,8 @@ fetch('/api/v1.0/quarterly_data')
 async function plotChart(data) {
    
    // set up SVG
-    const svg = d3.select("#chart")
-   const width = svg.node().clientWidth;
+   const svg = d3.select("#chart")
+   const width = svg.node().clientWidth - 150;
    const height = svg.node().clientHeight;
    const ticker = 500;
 
@@ -44,7 +44,9 @@ async function plotChart(data) {
    const update = (year_period) =>  {
 
         // get the particular date and chage requirements
-       const presentData = Object.entries(data[year_period])
+        const presentData = Object.keys(data[year_period]).map(function(k) {
+         return {key: [k], value: data[year_period][k]};
+     });
     //    presentData = []
     //     for (const [key, value] of Object.entries(year_data)) {
     //         presentData.push([{key,value}])
@@ -74,7 +76,7 @@ async function plotChart(data) {
            .text(d => d.key + " "+ d.value)
            .transition()
            .delay(500)
-           .attr("x", data => widthScale(d.value) + fontSize)
+           .attr("x", d => widthScale(d.value) + fontSize)
            .attr("y", (d,i) => sortedRange.findIndex(e => e.key === d.key) * (rectProperties.height + rectProperties.padding) + fontSize) 
 
        container
@@ -91,7 +93,8 @@ async function plotChart(data) {
            .attr("y", (d,i) => sortedRange.findIndex(e => e.key === d.key) * (rectProperties.height + rectProperties.padding))
            .attr("width", d => d.value <= 0? 0 : widthScale(d.value))
            .attr("height", 20)
-           .attr("fill", d => d.value >100 ? "red" : "green")
+           .attr("fill", d => colorScale(d.value))
+           //.attr("fill", d => d.value >600 ? "red" : "green")
 
    }
    for (const year_period of dateList) {
@@ -117,6 +120,13 @@ function processEachDateData(data) {
            //.sort((a,b) => b.value-a.value) 
 }
 
+const colorScale = function(value) {
+   if (value < 300) {return "green"}
+   else if (value < 400) {return "blue"}
+   else if (value < 500) {return "yellow"}
+   else if (value < 600) {return "orange"}
+   else {return "red"}
+}
 // // function to plot the data
 // async function plotChart(data) {
    
