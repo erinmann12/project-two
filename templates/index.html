@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>Changes in Housing Prices</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
-        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{url_for('static', filename='/css/style.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
@@ -14,12 +14,12 @@
     <!-- nav bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="/">Housing Price Index</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="/data" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Data
@@ -47,28 +47,91 @@
                     <!-- <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                     </li>
+                -->
                 </ul>
             </div>
         </div>
     </nav>
+<!-- end nav bar -->
 
-        <div class = "container">
-            <div class="chart">
-            </div>
 
-            <div class ="row">
-                <div id="chart1" class = "col-md-6">
-                    
-                </div>
-                <div id="chart2" class = "col-md-6">
-                    
-                </div>
+    <!-- container holds summary image, summary paragraph, and visualization icons.  -->
+
+    <div class="container">
+
+        <div class ="row">
+    
+          <div class = "col-md-7">
+    
+            <h2>Housing Price Index</h2>
+    
+            <hr>
+     
+            <a href="#">
+                <img id="left-image" src="{{ url_for('static', filename='/images/blueprint.jpg') }}">
+              <!-- <img id="left-image" src="images/blueprint.jpg" alt=""> -->
+            </a>
+    
+            <p>Owning a home is the American dream. But how attainable is that dream? Many people are choosing not to buy homes for a varity of reasons including affordability.
+                Home prices continue to rise across the United States, thus turning many people away from making such a large investment. 
+            </p>
+            <br>
+            <p>The Federal Housing Finance Agency's House Price Index measures changes in single-family home values based on data from all 50 states. It is the broad measure of the movement of single-family house prices.
+                The HPI is a wieghten, repeat-sales index, so it measures average price changes in sales or refinancings on the same properties.
+            </p>
+            <br>
+            <p>We investigated the data in this index to see how home prices change over time (starting in 1975) in specific states as well as 
+                in the country as a whole. We have visualized the data in a variety of interactive ways, so please feel free to explore this website at your leisure.
+            </p>
+          </div>
+    
+          <div class = "col-md-5">
+    
+            <h3>Visualizations</h3>
+    
+            <hr>
+    
+            <div class="row">
+    
+              <div class="col-md-6">
+                <a href="/statedata">
+                    <img id="img-fluid right-image" src="{{ url_for('static', filename='images/homeprices.png') }}">
+                  <!-- <img class="img-fluid right-image" src="images/homeprices.png" alt=""> -->
+                </a>
+              </div>
+      
+              <div class="col-md-6">
+                <a href="#">
+                  <img class="img-fluid right-image" src="{{ url_for('static', filename='images/placeholder.png') }}">
+                </a>
+              </div>
+      
             </div>
+      
+            <div class="row">
+      
+              <div class="col-md-6">
+                <a href="#">
+                  <img class="img-fluid right-image" src="{{ url_for('static', filename='images/placeholder.png') }}">
+                </a>
+              </div>
+      
+              <div class="col-md-6">
+                <a href="#">
+                  <img class="img-fluid right-image" src="{{ url_for('static', filename='images/placeholder.png') }}">
+                </a>
+              </div>
+      
+    
+          </div>
+    
         </div>
+    
+      </div>
         
 		<script src="https://d3js.org/d3.v5.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
-        <script src="{{ url_for('static',filename='js/app.js') }}"></script>
+        <!-- <script src="{{ url_for('static',filename='js/app.js') }}"></script> -->
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </body>
 </html>

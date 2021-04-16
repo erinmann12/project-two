@@ -57,6 +57,11 @@ def states():
 
     return render_template("bar_race.html")
 
+@app.route("/percentchange")
+def change():
+    
+    return render_template("leaflet.html")
+
 # -------------------------------------------------------------------
 # API endpoint one
 # -------------------------------------------------------------------
