@@ -57,7 +57,7 @@ def states():
 
     return render_template("bar_race.html")
 
-@app.route("/percentchange")
+@app.route("/leaflet")
 def change():
     
     return render_template("leaflet.html")
@@ -77,7 +77,7 @@ def state_data():
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+    # Create a dictionary from the row data and append to a list
     state_info = []
     for hpi_type, purchase_type, frequency, location, place_name, place_id, year, period, price in results:
         state_dict = {}
@@ -109,7 +109,7 @@ def usa_data():
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+    # Create a dictionary from the row data and append to a list
     usa_info = []
     for hpi_type, purchase_type, frequency, location, place_name, place_id, year, period, price in results:
         usa_dict = {}
@@ -141,7 +141,7 @@ def puerto_rico_data():
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of adata
+    # Create a dictionary from the row data and append to a list
     puerto_rico_info = []
     for hpi_type, purchase_type, frequency, location, place_name, place_id, year, period, price in results:
         puerto_rico_dict = {}
@@ -173,7 +173,7 @@ def quarterly_states_data():
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+    # Create a dictionary from the row data and append to a list
     quarterly_states_info = []
     for hpi_type, purchase_type, frequency, location, place_name, place_id, year, period, price in results:
         quarterly_states_dict = {}
@@ -223,7 +223,7 @@ def percent_increase():
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+    # Create a dictionary from the row data and append to a list
     state_percent_increase_info = []
     for place_name, place_id, year, period1, price1, period4, price4, yearly_change in results:
         percent_increase_dict = {}
@@ -238,6 +238,22 @@ def percent_increase():
         state_percent_increase_info.append(percent_increase_dict)
 
     return jsonify(state_percent_increase_info)
+
+# -------------------------------------------------------------------
+# API endpoint seven -- for Kendrick
+# -------------------------------------------------------------------
+@app.route("/api/v1.0/usa_monthly")
+def usa_monthly():
+    session = Session(engine)
+    # sorted_state_df = pd.read_sql_table(quarterly_states, con=engine)
+    usa_df = pd.read_sql_query("SELECT * FROM usa", con=engine)
+    usa_df['year_period'] = usa_df['year'].astype(str) + "-M" + usa_df['period'].astype(str)
+    usa_df = usa_df.loc[usa_df['hpi_type'] == 'traditional']
+    usa_df = usa_df.loc[usa_df['purchase_type'] == 'all-transactions']
+    # usa_df = usa_df.loc[usa_df['place_name'] == 'United States']
+    pivoted = usa_df.pivot(index='year_period', columns='place_name', values='price')
+    session.close()
+    return pivoted.to_json(orient='index')
 
 if __name__ == '__main__':
     app.run(debug=True)
