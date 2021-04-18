@@ -11,7 +11,7 @@ async function plotChart(data) {
    
    // set up SVG
    const svg = d3.select("#chart")
-   const width = svg.node().clientWidth - 150;
+   const width = svg.node().clientWidth - 170;
    const height = svg.node().clientHeight;
    const ticker = 500;
 
