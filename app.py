@@ -61,7 +61,11 @@ def states():
 def change():
     
     return render_template("leaflet.html")
-
+    
+@app.route("/prchart")
+def prusa():
+    
+    return render_template("pr_chart.html")
 # -------------------------------------------------------------------
 # API endpoint one
 # -------------------------------------------------------------------
@@ -240,7 +244,7 @@ def percent_increase():
     return jsonify(state_percent_increase_info)
 
 # -------------------------------------------------------------------
-# API endpoint seven -- for Kendrick
+# API endpoint seven 
 # -------------------------------------------------------------------
 @app.route("/api/v1.0/usa_monthly")
 def usa_monthly():
@@ -254,6 +258,21 @@ def usa_monthly():
     pivoted = usa_df.pivot(index='year_period', columns='place_name', values='price')
     session.close()
     return pivoted.to_json(orient='index')
+
+# -------------------------------------------------------------------
+# API endpoint eight
+# -------------------------------------------------------------------
+@app.route("/api/v1.0/pr_monthly")
+def pr_monthly():
+    session = Session(engine)
+    pr_df = pd.read_sql_query("SELECT * FROM puerto_rico", con=engine)
+    pr_df['year_period'] = pr_df['year'].astype(str) + "-Q" + pr_df['period'].astype(str)
+    pr_df = pr_df.loc[pr_df['hpi_type'] == 'developmental']
+    pr_df = pr_df.loc[pr_df['purchase_type'] == 'all-transactions']
+    pr_df = pr_df.loc[pr_df['place_name'] == 'Puerto Rico']
+    pivoted = pr_df.pivot(index='year_period', columns='place_name', values='price')
+    session.close()
+    return pivoted.to_json(orient='table')
 
 if __name__ == '__main__':
     app.run(debug=True)
