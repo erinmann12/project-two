@@ -20,5 +20,6 @@ For this group project, we wanted to explore the changes in single family home p
 
 **Project Tasks**
 
-We started by pulling the large dataset into a Jupyter Notebook to explore the data and divide it into three different dataframes: USA data, Puerto Rico data, and State data. From there, we imported the data into a SQLite database. Next, we created a Flask app to read the database and created different API endpoints based on the data. From there, we were each tasked with creating separate charts to display on our webpage.
+We started by pulling the large dataset into a Jupyter Notebook to explore the data and divide it into three different data frames: USA data, Puerto Rico data, and State data. From there, we imported the data into a SQLite database. Next, we created a Flask app to read the database and created different API endpoints based on the data. From there, we were each tasked with creating separate charts to display on our webpage.
 
+![](https://github.com/erinmann12/project-two/blob/main/static/images/homepage.PNG)
