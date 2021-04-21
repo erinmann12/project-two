@@ -47,10 +47,10 @@ def home():
 
     return render_template("index.html")
 
-@app.route("/data")
-def data():
+# @app.route("/data")
+# def data():
 
-    return render_template("data.html")
+#     return render_template("data.html")
     
 @app.route("/statedata")
 def states():
@@ -66,6 +66,26 @@ def change():
 def prusa():
     
     return render_template("pr_chart.html")
+
+@app.route("/statetable")
+def data():
+
+    return render_template("state_table.html")
+
+@app.route("/prdata")
+def pr():
+
+    return render_template("pr_table.html")
+
+@app.route("/usadata")
+def usadata():
+
+    return render_template("usa_table.html")
+
+@app.route("/line")
+def line():
+    return render_template("line.html") 
+    
 # -------------------------------------------------------------------
 # API endpoint one
 # -------------------------------------------------------------------
@@ -271,6 +291,22 @@ def pr_monthly():
     pr_df = pr_df.loc[pr_df['purchase_type'] == 'all-transactions']
     pr_df = pr_df.loc[pr_df['place_name'] == 'Puerto Rico']
     pivoted = pr_df.pivot(index='year_period', columns='place_name', values='price')
+    session.close()
+    return pivoted.to_json(orient='table')
+
+# -------------------------------------------------------------------
+# API endpoint nine
+# -------------------------------------------------------------------
+@app.route("/api/v1.0/usa_line")
+def usa_line():
+    session = Session(engine)
+    # sorted_state_df = pd.read_sql_table(quarterly_states, con=engine)
+    usa_df = pd.read_sql_query("SELECT * FROM usa", con=engine)
+    usa_df['year_period'] = usa_df['year'].astype(str) + "-Q" + usa_df['period'].astype(str)
+    usa_df = usa_df.loc[usa_df['hpi_type'] == 'traditional']
+    usa_df = usa_df.loc[usa_df['purchase_type'] == 'all-transactions']
+    usa_df = usa_df.loc[usa_df['place_name'] == 'United States']
+    pivoted = usa_df.pivot(index='year_period', columns='place_name', values='price')
     session.close()
     return pivoted.to_json(orient='table')
 

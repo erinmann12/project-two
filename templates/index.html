@@ -26,9 +26,9 @@
                             Data
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">USA</a></li>
-                            <li><a class="dropdown-item" href="#">States</a></li>
-                            <li><a class="dropdown-item" href="#">Puerto Rico</a></li>
+                            <li><a class="dropdown-item" href="/usadata">USA</a></li>
+                            <li><a class="dropdown-item" href="/statetable">States</a></li>
+                            <li><a class="dropdown-item" href="/prdata">Puerto Rico</a></li>
                         </ul>
                     </li> 
                     <!-- <li class="nav-item">
@@ -42,6 +42,7 @@
                             <li><a class="dropdown-item" href="/statedata">State Prices</a></li>
                             <li><a class="dropdown-item" href="/leaflet">Leaflet Map</a></li>
                             <li><a class="dropdown-item" href="/prchart">Puerto Rico</a></li>
+                            <li><a class="dropdown-item" href="/line">USA Prices</a></li>
                         </ul>
                     </li> 
                     <li class="nav-item">
@@ -61,7 +62,7 @@
 
         <div class ="row">
     
-          <div class = "col-md-7">
+          <div class = "col-md-6">
     
             <h2>Housing Price Index</h2>
     
@@ -85,7 +86,7 @@
             </p>
           </div>
     
-          <div class = "col-md-5">
+          <div class = "col-md-6">
     
             <h3>Visualizations</h3>
     
@@ -95,12 +96,12 @@
     
               <div class="col-md-6">
                 <a href="/statedata">
-                    <img class="right-image" src="{{ url_for('static', filename='images/homeprices.png') }}">
+                    <img class="right-image" src="{{ url_for('static', filename='images/leafletmap.PNG') }}">
                 </a>
               </div>
       
               <div class="col-md-6">
-                <a href="#">
+                <a href="/leaflet">
                   <img class="right-image" src="{{ url_for('static', filename='images/puertorico.PNG') }}">
                 </a>
               </div>
@@ -110,14 +111,14 @@
             <div class="row">
       
               <div class="col-md-6">
-                <a href="#">
-                  <img class="right-image" src="{{ url_for('static', filename='images/leafletmap.PNG') }}">
+                <a href="/prchart">
+                  <img class="right-image" src="{{ url_for('static', filename='images/placeholder.png') }}">
                 </a>
               </div>
       
               <div class="col-md-6">
                 <a href="#">
-                  <img class="right-image" src="{{ url_for('static', filename='images/placeholder.png') }}">
+                  <img class="right-image" src="{{ url_for('static', filename='images/homeprices.png') }}">
                 </a>
               </div>
       
@@ -125,12 +126,20 @@
           </div>
     
         </div>
+        <br>
+        <br>
+        <br>
+        <div class ="row">
+          <h2 style ="text-align:center">United States Housing Price Index</h2>
+          <div id="plot"></div>
+        </div>
     
-      </div>
+    </div>
         
 		<script src="https://d3js.org/d3.v5.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
     <script src="{{ url_for('static',filename='js/bar_race.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/line_chart.js') }}"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </body>
 </html>
