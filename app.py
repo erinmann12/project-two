@@ -85,7 +85,11 @@ def usadata():
 @app.route("/line")
 def line():
     return render_template("line.html") 
-    
+
+@app.route("/divline")
+def divline():
+    return render_template("divline.html") 
+
 # -------------------------------------------------------------------
 # API endpoint one
 # -------------------------------------------------------------------
