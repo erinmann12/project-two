@@ -22,7 +22,7 @@ d3.json("/api/v1.0/pr_monthly").then(function(prData){
         title: "Date (Year-Quarter)"
       },
       yaxis: {
-        title: "Single Family House Price (K)"
+        title: "Price (in thousands)"
       }
     };
   

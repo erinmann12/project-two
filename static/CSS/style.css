@@ -39,3 +39,17 @@ p{
 body {
   padding-bottom: 50px;
 }
+
+.legend {
+  line-height: 18px;
+  color: #555;
+  background-color: white;
+  
+}
+.legend i {
+  width: 10px;
+  height: 10px;
+  float: left;
+  margin-right: 8px;
+  opacity: 1;
+}

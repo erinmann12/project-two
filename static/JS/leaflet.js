@@ -26,7 +26,7 @@ var mygeoMap = null
       
       selected = data.filter(d => d.place_name == state && d.year == year)[0]
 
-    console.log(state)
+    console.log(selected)
     if(!selected)
         return "white"
     console.log(selected)
@@ -72,21 +72,9 @@ var mygeoMap = null
     else (selected.yearly_change >= -60)
         return "#FE3232"
     
-//     switch (state) {
-//     case "Brooklyn":
-//       return "yellow";
-//     case "Bronx":
-//       return "red";
-//     case "Manhattan":
-//       return "orange";
-//     case "Queens":
-//       return "green";
-//     case "Staten Island":
-//       return "purple";
-//     default:
-//       return "black";
-//     }
   }
+  
+ 
 
 
 function drawMap(year) {
@@ -94,8 +82,10 @@ function drawMap(year) {
   var geojsondata = "./static/gz_2010_us_040_00_500k.json"
   // Grabbing our GeoJSON data..
   d3.json(link, function(data) {
-      console.log(data)
+    //   console.log(data)
     // Creating a geoJSON layer with the retrieved data
+    
+    
   
     d3.json(geojsondata, function(geo) {
         // console.log(geo)
@@ -109,11 +99,81 @@ function drawMap(year) {
            fillOpacity: 0.5,
             weight: 1.5
          };
-      }
+      },
+      onEachFeature: onEachFeature
+      
     }).addTo(myMap);
+
+    //// Binding popups
+
+    // L.choropleth(geojsonData, {
+    //     valueProperty: , // which property in the features to use
+    //     scale: [], // chroma.js scale - include as many as you like
+    //     steps: , // number of breaks or steps in range
+    //     mode: 'q', // q for quantile, e for equidistant, k for k-means
+    //     style: {
+    //         color: '#fff', // border color
+    //         weight: 2,
+    //         fillOpacity: 0.8
+    //     },
+    //     onEachFeature: function(feature, layer) {
+    //         layer.bindPopup(feature.properties.value)
+    //     }
+    // }).addTo(map)
+    
+
+    // BIND POPUP
+
+    // L.geoJson(data, {},
+    //     onEachFeature: onEachFeature
+    //     ).addTo(map);
+
+    
+
+    function onEachFeature(feature, layer) {
+        
+        console.log(data)
+        try{
+
+        layer.bindPopup('<h1>'+feature.properties.NAME+'</h1><p>Yeary Change: '+data.filter(d => d.place_name == feature.properties.NAME)[0].yearly_change+'</p>');
+        }
+
+        catch{
+            layer.bindPopup('<h1>'+feature.properties.NAME+'</h1>')
+        }
+    }
+    
+    
+
+    // ADD LEGEND
+
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function () {
+
+
+        var div = L.DomUtil.create('div', 'info legend');
+            grades = [-3.5, -3, -2.5, -2, -1.5, -1, 0, 1, 1.5, 2, 2.5, 3, 3.5];
+            labels = ["#1C8100", "#37921B",  "#52A436", "#6DB551", "#87C66C", "#A2D787", "#BDE9A2", "white", "#FECAE9", "#FEB4CF", "#FE9FB5", "#FE899B", "#FE7380", "#FE5D66", "#FE484C", "#FE3232"].reverse();
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + labels[i] + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+
+        return div;
+    };
+
+    legend.addTo(myMap);
+
+
     })
   });
 }
+
+
 
 
 // This function is called when a dropdown menu item is selected
@@ -125,28 +185,6 @@ function updateMap(selectedYear) {
   drawMap(selectedYear);
   
   
-  // Use D3 to select the dropdown menu
-  // var dropdownMenu = d3.select("#selDataset");
-  // // Assign the value of the dropdown menu option to a variable
-  // var dataset = dropdownMenu.property("value");
-
-  // Initialize x and y arrays
-  // var x = [];
-  // var y = [];
-
-  // if (dataset === 'dataset1') {
-  //   x = [1, 2, 3, 4, 5];
-  //   y = [1, 2, 4, 8, 16];
-  // }
-
-  // else if (dataset === 'dataset2') {
-  //   x = [10, 20, 30, 40, 50];
-  //   y = [1, 10, 100, 1000, 10000];
-  // }
-
-  // Note the extra brackets around 'x' and 'y'
-//   Plotly.restyle("plot", "x", [x]);
-//   Plotly.restyle("plot", "y", [y]);
 }
 
 drawMap("1975")

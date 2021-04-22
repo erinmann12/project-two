@@ -52,7 +52,27 @@ async function plotChart(data) {
 
       //print ticker
        d3.select("#datelocation").text(year_period)
-       
+
+       //legend
+
+        var labels = ["<$300K", "$300K+", "$400K+", "$500K+", "$600K+"]
+        // var color = ["green", "blue","yellow","orange","red"]
+        var legend = svg.selectAll("#legend")
+        .data(labels)
+        .enter()
+        .append("g")
+
+        legend.append("circle").attr("cx",999).attr("cy",110).attr("r", 4).style("fill", "green")
+        legend.append("circle").attr("cx",999).attr("cy",125).attr("r", 4).style("fill", "blue")
+        legend.append("circle").attr("cx",999).attr("cy",140).attr("r", 4).style("fill", "yellow")
+        legend.append("circle").attr("cx",999).attr("cy",155).attr("r", 4).style("fill", "orange")
+        legend.append("circle").attr("cx",999).attr("cy",170).attr("r", 4).style("fill", "red")
+        legend.append("text").attr("x", 1015).attr("y", 110).text("<$300K").style("font-size", "15px").attr("alignment-baseline","middle")
+        legend.append("text").attr("x", 1015).attr("y",125).text("$300K+").style("font-size", "15px").attr("alignment-baseline","middle")
+        legend.append("text").attr("x", 1015).attr("y", 140).text("$400K").style("font-size", "15px").attr("alignment-baseline","middle")
+        legend.append("text").attr("x", 1015).attr("y",155).text("$500K+").style("font-size", "15px").attr("alignment-baseline","middle")
+        legend.append("text").attr("x", 1015).attr("y", 170).text("$600K+").style("font-size", "15px").attr("alignment-baseline","middle")
+
        container
            .selectAll("text")
            .data(presentData)
@@ -88,8 +108,8 @@ async function plotChart(data) {
       update(year_period)
       await new Promise(done => setTimeout(() => done(), ticker));
    } 
-}
 
+}
 
 function processEachDateData(data) {
    //remove previous date
