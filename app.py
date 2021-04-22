@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 import sqlalchemy
@@ -8,8 +7,6 @@ from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify, render_template
 import json
-import pprint
-
 
 # #################################################
 # # Database Setup
