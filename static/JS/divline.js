@@ -75,7 +75,7 @@ d3.json("./static/usa.json").then(function(data)
       x: period4,
       y: price4,
       mode: 'lines',
-      name: 'Mountain Divisionn',
+      name: 'Mountain Division',
       line: {
         dash: 'dot',
         width: 4
