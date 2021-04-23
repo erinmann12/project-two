@@ -6,10 +6,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
     integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
     crossorigin=""/>
-
     <!-- d3 JavaScript -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
-
     <meta charset="utf-8">
 	<title>Changes in Housing Prices</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}">
@@ -39,9 +37,6 @@
                             <li><a class="dropdown-item" href="/prdata">Puerto Rico</a></li>
                         </ul>
                     </li> 
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="/statedata">State HPI</a>
-                    </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Charts
@@ -63,6 +58,7 @@
         </div>
     </nav>
 <!-- end nav bar -->
+
     <div class = "container">
         <h1 style ="text-align:center">Map of State Housing Prices</h1>
 
