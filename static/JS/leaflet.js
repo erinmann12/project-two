@@ -21,6 +21,8 @@ var mygeoMap = null
 
   console.log(link)
   
+  var selectYear = "1975"
+
   // Function that will determine the color of a state based on the percent yearly price change
   function chooseColor(state, data, year) {
       
@@ -86,7 +88,8 @@ function drawMap(year) {
     // Creating a geoJSON layer with the retrieved data
     
     
-  
+  // CHOROPLETH "SUBSTITUTE" FUNCTION
+
     d3.json(geojsondata, function(geo) {
         // console.log(geo)
       if(mygeoMap != undefined)
@@ -131,11 +134,14 @@ function drawMap(year) {
     
 
     function onEachFeature(feature, layer) {
-        
+        // layer.unbindPopup()
+        console.log(selectYear)
+        correctYear = data.filter(d => d.year == selectYear)
         console.log(data)
+        console.log(selected)
         try{
 
-        layer.bindPopup('<h1>'+feature.properties.NAME+'</h1><p>Yeary Change: '+data.filter(d => d.place_name == feature.properties.NAME)[0].yearly_change+'</p>');
+        layer.bindPopup('<h1>'+feature.properties.NAME+'</h1><p>Yeary Change: '+correctYear.filter(d => d.place_name == feature.properties.NAME)[0].yearly_change+'</p>');
         }
 
         catch{
@@ -146,27 +152,9 @@ function drawMap(year) {
     
 
     // ADD LEGEND
+    
 
-    var legend = L.control({position: 'bottomright'});
-
-    legend.onAdd = function () {
-
-
-        var div = L.DomUtil.create('div', 'info legend');
-            grades = [-3.5, -3, -2.5, -2, -1.5, -1, 0, 1, 1.5, 2, 2.5, 3, 3.5];
-            labels = ["#1C8100", "#37921B",  "#52A436", "#6DB551", "#87C66C", "#A2D787", "#BDE9A2", "white", "#FECAE9", "#FEB4CF", "#FE9FB5", "#FE899B", "#FE7380", "#FE5D66", "#FE484C", "#FE3232"].reverse();
-
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + labels[i] + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        }
-
-        return div;
-    };
-
-    legend.addTo(myMap);
+   
 
 
     })
@@ -178,7 +166,7 @@ function drawMap(year) {
 
 // This function is called when a dropdown menu item is selected
 function updateMap(selectedYear) {
-
+selectYear = selectedYear
   console.log(selectedYear)
   
   // onResize(selectedYear); 
@@ -188,6 +176,27 @@ function updateMap(selectedYear) {
 }
 
 drawMap("1975")
+
+var legend = L.control({position: 'bottomleft'});
+
+legend.onAdd = function () {
+
+
+    var div = L.DomUtil.create('div', 'info legend');
+        grades = [-3.5, -3, -2.5, -2, -1.5, -1, 0, 1, 1.5, 2, 2.5, 3, 3.5].reverse();
+        labels = ["#1C8100", "#37921B",  "#52A436", "#6DB551", "#87C66C", "#A2D787", "#BDE9A2", "white", "#FECAE9", "#FEB4CF", "#FE9FB5", "#FE899B", "#FE7380", "#FE5D66", "#FE484C", "#FE3232"];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + labels[i] + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(myMap);
 
 
 
